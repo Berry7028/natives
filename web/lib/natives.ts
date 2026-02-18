@@ -59,8 +59,12 @@ export async function getNativeIndex(): Promise<NativeEntry[]> {
   return indexCache.current;
 }
 
+export function getFunctionNameFromFile(fileName: string): string {
+  return fileName.replace(/\.md$/i, "");
+}
+
 export function getNativeHref(entry: Pick<NativeEntry, "namespace" | "fileName">): string {
-  return `/?ns=${encodeURIComponent(entry.namespace)}&fn=${encodeURIComponent(entry.fileName.replace(/\.md$/i, ""))}`;
+  return `/?ns=${encodeURIComponent(entry.namespace)}&fn=${encodeURIComponent(getFunctionNameFromFile(entry.fileName))}`;
 }
 
 export function resolveNativeFilePath(namespace: string, functionName: string): string | null {

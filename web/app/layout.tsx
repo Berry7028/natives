@@ -3,10 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Natives Docs Viewer",
-  description: "Lightweight Next.js native function documentation explorer",
-  other: {
-    google: "notranslate",
-  },
+  description: "軽量な Next.js 製ネイティブ関数ドキュメントビューア",
 };
 
 export default function RootLayout({

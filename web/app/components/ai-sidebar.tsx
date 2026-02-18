@@ -13,6 +13,7 @@ export function AiSidebar({ initialSuggestions }: { initialSuggestions: Suggesti
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState(initialSuggestions);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const buttonDisabled = useMemo(() => loading || !input.trim(), [input, loading]);
 
@@ -22,15 +23,19 @@ export function AiSidebar({ initialSuggestions }: { initialSuggestions: Suggesti
     }
 
     setLoading(true);
+    setError("");
 
     try {
       const response = await fetch(`/api/ai-suggest?q=${encodeURIComponent(input)}`);
       if (!response.ok) {
+        setError("提案の取得に失敗しました。少し待って再試行してください。");
         return;
       }
 
       const data = (await response.json()) as { suggestions?: Suggestion[] };
       setSuggestions(data.suggestions ?? []);
+    } catch {
+      setError("通信エラーが発生しました。接続を確認してください。");
     } finally {
       setLoading(false);
     }
@@ -51,6 +56,7 @@ export function AiSidebar({ initialSuggestions }: { initialSuggestions: Suggesti
           {loading ? "検索中..." : "提案を取得"}
         </button>
       </div>
+      {error && <p className="errorText">{error}</p>}
       <ul className="suggestions" aria-live="polite">
         {suggestions.map((suggestion) => (
           <li key={`${suggestion.namespace}:${suggestion.functionName}`}>

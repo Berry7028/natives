@@ -1,5 +1,11 @@
 import { AiSidebar } from "@/app/components/ai-sidebar";
-import { getNativeHref, getNativeIndex, getNativeMarkdown, searchNativeEntries } from "@/lib/natives";
+import {
+  getFunctionNameFromFile,
+  getNativeHref,
+  getNativeIndex,
+  getNativeMarkdown,
+  searchNativeEntries,
+} from "@/lib/natives";
 
 type SearchParams = Promise<{ ns?: string; fn?: string }>;
 
@@ -10,7 +16,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     params.ns && params.fn
       ? { namespace: params.ns, functionName: params.fn }
       : index[0]
-        ? { namespace: index[0].namespace, functionName: index[0].fileName.replace(/\.md$/i, "") }
+        ? { namespace: index[0].namespace, functionName: getFunctionNameFromFile(index[0].fileName) }
         : null;
 
   const markdown = selected
@@ -20,7 +26,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const initialSuggestions = searchNativeEntries(index, "").map((entry) => ({
     namespace: entry.namespace,
     title: entry.title,
-    functionName: entry.fileName.replace(/\.md$/i, ""),
+    functionName: getFunctionNameFromFile(entry.fileName),
     href: getNativeHref(entry),
   }));
 

@@ -121,3 +121,9 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+
+.errorText {
+  margin: 0 0 10px;
+  color: #b91c1c;
+  font-size: 13px;
+}
